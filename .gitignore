@@ -1,0 +1,10 @@
+.venv*
+videos/
+*.log
+__pycache__
+images/
+OLD/
+.venv*
+videos/
+*.log
+__pycache__
