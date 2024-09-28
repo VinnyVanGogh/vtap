@@ -8,7 +8,9 @@ import threading
 import queue
 from components.ascii_art import AsciiArt
 from colorama import init, Style
+from components.logger import log, print_log
 
+@log('main')
 def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -40,6 +42,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     total_processed_count = [0]
     processed_count_lock = threading.Lock()
 
+    @log('ascii_display')
     def frame_reader():
         nonlocal frame_number
         try:
@@ -51,11 +54,13 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
                 frame_queue.put((frame_number, frame))
         except Exception as e:
             print(f"Exception in frame_reader: {e}")
+            print_log(f"Exception in frame_reader: {e}", level="error")
         finally:
             cap.release()
             for _ in range(num_processor_threads):
                 frame_queue.put(None)
 
+    @log('ascii_display')
     def frame_processor():
         try:
             while not shutdown_event.is_set():
@@ -78,7 +83,9 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
                         preprocessing_done.set()
         except Exception as e:
             print(f"Exception in frame_processor: {e}")
+            print_log(f"Exception in frame_processor: {e}", level="error")
 
+    @log('ascii_display')
     def frame_display():
         nonlocal total_frames_processed, total_frames_skipped
         expected_frame_time = time.time()
@@ -122,10 +129,11 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
 
         except Exception as e:
             print(f"Exception in frame_display: {e}")
+            print_log(f"Exception in frame_display: {e}", level="error")
         finally:
             processing_done.set()
-            print(f"\nTotal frames processed: {total_frames_processed}")
-            print(f"Total frames skipped: {total_frames_skipped}")
+            print_log(f"Total frames processed: {total_frames_processed}", level="info")
+            print_log(f"Total frames skipped: {total_frames_skipped}", level="warning")
 
     reader_thread = threading.Thread(target=frame_reader)
     processor_threads = [threading.Thread(target=frame_processor) for _ in range(num_processor_threads)]
@@ -140,21 +148,24 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     total_time = end_time - start_time
     avg_processing_time_per_frame = total_time / initial_queue_size
 
-    print(f"\nPreprocessing {initial_queue_size} frames took {total_time:.2f} seconds.")
-    print(f"Average processing time per frame: {avg_processing_time_per_frame:.4f} seconds.")
-    print(f"Frame delay (time per frame at {fps} FPS): {frame_delay:.4f} seconds.")
+    print_log(f"Preprocessing {initial_queue_size} frames took {total_time:.2f} seconds.", level="info")
+    print_log(f"Average processing time per frame: {avg_processing_time_per_frame:.4f} seconds.", level="info")
+    print_log(f"Frame delay (time per frame at {fps} FPS): {frame_delay:.4f} seconds.", level="info")
+
     estimated_skipped_frames = int((avg_processing_time_per_frame - frame_delay) * initial_queue_size)
-    print(f"Estimated skipped frames: {estimated_skipped_frames}")
+    
+    print_log(f"Estimated skipped frames: {estimated_skipped_frames}", level="warning")
+    
     if estimated_skipped_frames > 0:
         played_frames_per_skipped_frame = total_frames_processed / total_frames_skipped
-        print(f"Played frames per skipped frame: {played_frames_per_skipped_frame:.2f}")
+        print_log(f"Played frames per skipped frame: {played_frames_per_skipped_frame:.2f}", level="warning")
     else:
-        print("No frames should be skipped.")
+        print_log("No frames should be skipped.", level="info")
 
     if avg_processing_time_per_frame > frame_delay:
-        print("Warning: Processing is slower than the expected frame rate. Consider optimizing.")
+        print_log("Warning: Processing is slower than the expected frame rate. Consider optimizing.", level="warning")
     else:
-        print("Processing is fast enough to keep up with the expected FPS.")
+        print_log("Processing is fast enough to keep up with the expected FPS.", level="info")
 
     time.sleep(5)
 

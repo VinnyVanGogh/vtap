@@ -3,11 +3,13 @@
 import cv2
 import numpy as np
 from colorama import init
+from components.logger import log, print_log
 
 init()
 
 class AsciiArt:
 
+    @log('ascii_art')
     def __init__(self, args, frame, frame_size):
         self.args = args
         self.frame = frame
@@ -16,6 +18,7 @@ class AsciiArt:
         self.num_chars = len(self.chars)
         self.area = 255 // (self.num_chars - 1) if self.num_chars > 1 else 255
 
+    @log('ascii_art')
     def ascii_art(self):
         resized_frame = cv2.resize(self.frame, self.frame_size, interpolation=cv2.INTER_AREA)
 

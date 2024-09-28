@@ -6,7 +6,9 @@ import sys
 import threading
 import time
 import signal
+from components.logger import log, print_log
 
+@log('main')
 def play_audio(video_path, shutdown_event):
     cmd = [
         'ffplay', '-nodisp', '-autoexit', '-loglevel', 'quiet', video_path
@@ -24,6 +26,7 @@ def play_audio(video_path, shutdown_event):
                 break
     except Exception as e:
         print(f"Exception in play_audio: {e}")
+        print_log(f"Exception in play_audio: {e}", level='error')
     finally:
         if shutdown_event.is_set():
             if process.poll() is None:
@@ -34,4 +37,5 @@ def play_audio(video_path, shutdown_event):
                         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
                 except Exception as e:
                     print(f"Error terminating audio subprocess: {e}")
+                    print_log(f"Error terminating audio subprocess: {e}", level='error')
         process.wait()
