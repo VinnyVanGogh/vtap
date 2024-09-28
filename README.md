@@ -163,11 +163,13 @@ python vtap.py --url 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' --fullscreen
 ```
 vtap/
 ├── vtap.py
-├── downloader.py
-├── ascii_art.py
-├── ascii_video.py
-├── audio_player.py
-├── my_args.py
+├── components/
+├────── downloader.py
+├────── ascii_art.py
+├────── ascii_picture.py
+├────── ascii_video.py
+├────── audio_player.py
+├────── my_args.py
 ├── requirements.txt
 ```
 
@@ -177,6 +179,7 @@ vtap/
 - **downloader.py:** Handles downloading the YouTube video.
 - **ascii_art.py:** Contains the `AsciiArt` class for converting frames to ASCII art.
 - **ascii_video.py:** Manages video playback, including multithreading for frame processing.
+- **ascii_picture.py:** Manages picture display, displaying an image in the terminal as ASCII art.
 - **audio_player.py:** Handles audio playback using `ffplay`.
 - **my_args.py:** Contains the argument parser configuration.
 - **requirements.txt:** Lists the required Python packages.
@@ -236,21 +239,13 @@ This project is licensed under the [MIT License](LICENSE). You are free to use, 
 
 ---
 
-## Acknowledgments
-
-- **CPython Development Team:** For introducing the experimental free-threaded build in Python 3.13.
-- **Contributors:** Thanks to everyone who has contributed to this project.
-- **OpenCV and NumPy:** For providing powerful tools for image and video processing.
-
----
-
 ## Troubleshooting
 
 ### Common Issues
 
 - **SSL Certificate Error when Downloading Videos:**
 
-  If you encounter an SSL error, you may need to install the necessary certificates. On macOS, run the `Install Certificates.command` script located in `/Applications/Python 3.13/`.
+  If you encounter an SSL error, you may need to install the necessary certificates. On macOS, run the `Install Certificates.command` script located in `/Applications/Python 3.13/` or `/opt/homebrew/bin/python3.12` replace 3.12 with your current version.
 
 - **Slow Performance:**
 
@@ -265,40 +260,5 @@ This project is licensed under the [MIT License](LICENSE). You are free to use, 
 ### Support
 
 If you experience any issues or have questions, feel free to open an issue on the [GitHub repository](https://github.com/VinnyVanGogh/vtap/issues).
-
----
-
-## Additional Information
-
-### Free-Threaded Python Build
-
-This project utilizes the experimental free-threaded build of CPython 3.13, which removes the Global Interpreter Lock (GIL), allowing true parallelism with threads.
-
-**Note:** Python 3.13 is under development, and the free-threaded build is experimental. Ensure you are comfortable with using development versions of Python.
-
-### Installing Python 3.13 Free-Threaded Build
-
-1. **Download the Source Code:**
-
-   ```bash
-   git clone https://github.com/python/cpython.git
-   cd cpython
-   git checkout 3.13
-   ```
-
-2. **Build Python with Free-Threading Enabled:**
-
-   ```bash
-   ./configure --disable-gil
-   make
-   ```
-
-3. **Install Python:**
-
-   ```bash
-   sudo make altinstall
-   ```
-
-   **Note:** Use `make altinstall` to avoid overwriting your system's default Python.
 
 ---
