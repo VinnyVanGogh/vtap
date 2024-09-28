@@ -16,13 +16,26 @@
 
 ## Overview
 
-This project allows you to download a YouTube video and play it in your terminal as ASCII art with synchronized audio. It leverages multithreading and the experimental free-threaded build of CPython 3.13 to process video frames efficiently, ensuring smooth playback at the proper frames per second (FPS).
+This project allows you to download a YouTube video and play it in your terminal as ASCII art with synchronized audio. It leverages multithreading to process video frames efficiently, ensuring smooth playback at the proper frames per second (FPS). Skipping frames as needed if unable to keep up with just multithreading.
+
+### Features 
+
+- **ASCII Art Video Playback:** Watch YouTube videos in your terminal as ASCII art.
+- **Synchronized Audio:** Enjoy the video's audio alongside the ASCII art.
+- **Customization Options:** Adjust the ASCII art scale, characters, and colors.
+- **Demo Mode:** Play a demo video to test the functionality.
+- **Multithreaded Processing:** Utilize multiple threads for efficient video processing.
+- **Fullscreen Mode:** Fit the ASCII art to your terminal size. (Default, use `--fullscreen` to disable)
+- **Colored ASCII Art:** Enable colored ASCII art for a more vibrant experience. (Default, use `--colors` to disable)
+- **Display Pictures:** Display pictures in the terminal as ASCII art. (Default, use `--image_path` to specify a file path or url to an image)
+    - ex. `python vtap.py --image_path 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png' --chars ' .:-=+*#%@'`
+    - or `python vtap.py --image_path '~/Downloads/your_image.png' --chars ' .:-=+*#%@'`
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 
-- **Python 3.13** (Free-threaded build without the Global Interpreter Lock)
+- **Python 3.12**
 - **ffmpeg** or **ffplay** (for audio playback)
 - **pip** (Python package installer)
 
@@ -31,6 +44,7 @@ Before you begin, ensure you have the following installed on your system:
 - `pytube` (for downloading YouTube videos)
 - `opencv-python` (for video processing)
 - `numpy` (for numerical operations)
+- `colorama` (for colored ASCII art) - allows color on Windows
 
 You can install the Python packages using:
 
@@ -84,7 +98,9 @@ The script accepts several command-line arguments to customize the playback:
 - `--scale`: Scale factor for ASCII art (e.g., `0.5` for half size; default: `1.0`).
 - `--colors`: Enable colored ASCII art.
 - `--fullscreen`: Fit ASCII art to terminal size.
-- `--demo`: Play a demo video.
+- `--demo`: Play a demo video. (Plays 'Dax - Eminem "Houdini" Remix [One Take Video](https://www.youtube.com/watch?v=zyefOCRZMpA)' with --chars '█▓▒░ ')
+- `--image_path`: Display an image in the terminal as ASCII art. (e.g., `--image_path 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'` or `--image_path '~/Downloads/your_image.png'`)
+
 
 ### Examples
 

@@ -12,7 +12,7 @@ def display_picture(new_image_path, args, shutdown_event):
         # Read the image
         frame = cv2.imread(new_image_path)
         if frame is None:
-            print(f"Failed to load image: {image_path}")
+            print(f"Failed to load image: {new_image_path}")
             return
 
         # Get terminal size

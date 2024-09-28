@@ -23,6 +23,13 @@ def main():
 
     signal.signal(signal.SIGINT, signal_handler)
 
+    if args.demo_picture:
+        print("Demo mode enabled...")
+        args.chars = '█'
+        args.image_path = 'https://cdn.computerhoy.com/sites/navi.axelspringer.es/public/media/image/2023/04/raspberry-lanza-editor-codigo-aprender-python-lenguaje-ia-3008158.jpg'
+        print(f"Playing image: {args.image_path} with character: {args.chars}")
+        time.sleep(2)
+
     if args.image_path:
         print(f"Playing image: {args.image_path} with character: {args.chars}")
         new_image_path = download_picture(args.image_path)
@@ -31,11 +38,19 @@ def main():
 
     if args.demo:
         print("Demo mode enabled...")
-        args.chars = '█'
+        args.chars = '█▓▒░ '
         args.url = 'https://www.youtube.com/watch?v=zyefOCRZMpA'
         print(f"Playing video: {args.url} with character: {args.chars}")
         time.sleep(2)
-    
+
+    if args.demo_two:
+        print("Demo mode enabled...")
+        args.chars = '█▓▒░ '
+        args.url = 'https://www.youtube.com/watch?v=RvnxjeiVZ5Y'
+        print(f"Playing video: {args.url} with character: {args.chars}")
+        time.sleep(2)
+
+
     video_path = download_video(args.url)
 
     video_thread = threading.Thread(
@@ -48,7 +63,6 @@ def main():
     )
 
     video_thread.start()
-    # Wait until the video playback is about to start
     playback_started_event.wait()
     audio_thread.start()
 

@@ -52,7 +52,9 @@ def download_picture(image_path):
         safe_author = re.sub(r'[\\/*?:"<>|]', "", domain.lower().replace(' ', '_'))
         filename = Path(path).name
         safe_filename = re.sub(r'[\\/*?:"<>|]', "", filename)[:20]  
-        safe_filename = safe_filename + ".jpg"
+        print(f"safe_filename: {safe_filename}")
+        safe_filename = safe_filename + ".jpg" if not safe_filename.endswith(".jpg") else safe_filename
+        print(f"safe_filename 2: {safe_filename}")
 
         image_dir = Path(__file__).resolve().parent / "images" / safe_author
         image_dir.mkdir(parents=True, exist_ok=True)
