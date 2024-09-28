@@ -9,6 +9,7 @@ import queue
 from components.ascii_art import AsciiArt
 from colorama import init, Style
 from components.logger import log, print_log
+from components.loading_bar import display_loading_bar
 
 @log('main')
 def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
@@ -41,6 +42,9 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
 
     total_processed_count = [0]
     processed_count_lock = threading.Lock()
+    def get_processed_count():
+        with processed_count_lock:
+            return total_processed_count[0]
 
     @log('ascii_display')
     def frame_reader():
@@ -143,6 +147,14 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     for t in processor_threads:
         t.start()
 
+    loading_bar_thread = threading.Thread(
+        target=display_loading_bar,
+        args=(initial_queue_size, get_processed_count, shutdown_event),
+        daemon=False
+    )
+
+    loading_bar_thread.start()
+
     preprocessing_done.wait()
     end_time = time.time()
     total_time = end_time - start_time
@@ -166,8 +178,6 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
         print_log("Warning: Processing is slower than the expected frame rate. Consider optimizing.", level="warning")
     else:
         print_log("Processing is fast enough to keep up with the expected FPS.", level="info")
-
-    time.sleep(5)
 
     playback_started_event.set()
     display_thread = threading.Thread(target=frame_display)

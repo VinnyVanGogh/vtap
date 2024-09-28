@@ -8,9 +8,9 @@ import threading
 
 current_logger = contextvars.ContextVar('current_logger', default=None)
 
-Path('app_logs').mkdir(parents=True, exist_ok=True)
 
 LOG_DIR = 'app_logs/'
+
 
 loggers = {}
 
@@ -24,6 +24,8 @@ def increment_step():
         return step_counter
 
 def get_logger(log_file):
+    if not Path(LOG_DIR).exists():
+        Path(LOG_DIR).mkdir()
     log_file = LOG_DIR + log_file
     if not log_file.endswith('.log'):
         log_file += '.log'

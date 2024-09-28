@@ -8,4 +8,4 @@ OLD/
 videos/
 *.log
 __pycache__
-
+app_logs/
