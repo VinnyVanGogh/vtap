@@ -35,7 +35,6 @@ def main():
     playback_started_event = threading.Event()
 
     def signal_handler(sig, frame):
-        # use graceful close to handle the signal 
         print("\nCtrl+C received. Gracefully closing...")
         shutdown_event.set()
         graceful_close = GracefulClose()
@@ -113,4 +112,3 @@ if __name__ == '__main__':
         clear_log.write('')
         clear_log.close()
     main()
-

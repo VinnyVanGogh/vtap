@@ -19,7 +19,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
         fps = 30  # Default to 30 FPS if not available (average for most videos)
     frame_delay = 1 / fps
 
-    term_size = os.get_terminal_size()
+    term_size = os.get_terminal_size() 
     width, height = term_size.columns, term_size.lines
     if not args.fullscreen:
         width = int(width * args.scale)
@@ -64,7 +64,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
             for _ in range(num_processor_threads):
                 frame_queue.put(None)
 
-    @log('ascii_display')
+    @log('ascii_processor')
     def frame_processor():
         try:
             while not shutdown_event.is_set():
@@ -73,6 +73,14 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
                     ascii_queue.put(None)
                     break
                 f_number, frame = item
+
+                term_size = os.get_terminal_size()
+                width, height = term_size.columns, term_size.lines
+                if not args.fullscreen:
+                    width = int(width * args.scale)
+                    height = int(height * args.scale)
+    
+                print_log(f"Terminal size: {width}x{height}", level="info")
 
                 start_time = time.time()
                 ascii_art_generator = AsciiArt(args, frame, (width, height))
@@ -189,7 +197,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     
     if shutdown_event.is_set():
         print('Video Shutdown event received. Exiting...')
-        sys.exit(0)
+        print_log("Video shutdown event received. Exiting...", level="info")
 
     shutdown_event.set()
 
