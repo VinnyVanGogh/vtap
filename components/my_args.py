@@ -1,5 +1,4 @@
 # ./components/my_args.py
-# Example: python3.12 main.py --url https://www.youtube.com/watch?v=9bZkp7q19f0 -c " .:-=+*#%@"
 
 import argparse
 from components.logger import log

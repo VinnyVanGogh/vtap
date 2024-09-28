@@ -8,9 +8,7 @@ import threading
 
 current_logger = contextvars.ContextVar('current_logger', default=None)
 
-
 LOG_DIR = 'app_logs/'
-
 
 loggers = {}
 
@@ -65,6 +63,8 @@ def log(log_file):
 
 def print_log(message, level='INFO'):
     logger = current_logger.get()
+    if not logger:
+        logger = get_logger('main')
     if logger:
         current_step = step_counter
 

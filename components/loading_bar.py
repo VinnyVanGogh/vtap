@@ -29,4 +29,3 @@ def display_loading_bar(total, processed_func, shutdown_event, refresh_interval=
         time.sleep(refresh_interval)
     sys.stdout.write('\n')
     sys.stdout.flush()
-

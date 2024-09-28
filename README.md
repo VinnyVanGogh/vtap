@@ -18,6 +18,8 @@
 
 This project allows you to download a YouTube video and play it in your terminal as ASCII art with synchronized audio. It leverages multithreading to process video frames efficiently, ensuring smooth playback at the proper frames per second (FPS). Skipping frames as needed if unable to keep up with just multithreading.
 
+**There is a bug that you have to press Ctrl+C twice to exit the program. when playing a video.**
+
 ### Features 
 
 - **ASCII Art Video Playback:** Watch YouTube videos in your terminal as ASCII art.

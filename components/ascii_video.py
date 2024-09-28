@@ -156,6 +156,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     loading_bar_thread.start()
 
     preprocessing_done.wait()
+    loading_bar_thread.join()
     end_time = time.time()
     total_time = end_time - start_time
     avg_processing_time_per_frame = total_time / initial_queue_size
@@ -185,6 +186,10 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
 
     while not shutdown_event.is_set() and not processing_done.is_set():
         time.sleep(0.1)
+    
+    if shutdown_event.is_set():
+        print('Video Shutdown event received. Exiting...')
+        sys.exit(0)
 
     shutdown_event.set()
 
@@ -192,3 +197,6 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     for t in processor_threads:
         t.join()
     display_thread.join()
+
+    print_log("Video playback complete.", level="info")
+    print_log(f"Total frames processed: {total_frames_processed}", level="info")

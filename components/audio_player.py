@@ -29,6 +29,7 @@ def play_audio(video_path, shutdown_event):
         print_log(f"Exception in play_audio: {e}", level='error')
     finally:
         if shutdown_event.is_set():
+            print("Terminating audio subprocess")
             if process.poll() is None:
                 try:
                     if os.name == 'nt':

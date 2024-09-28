@@ -38,8 +38,8 @@ def display_picture(new_image_path, args, shutdown_event):
             time.sleep(0.1)
 
     except KeyboardInterrupt:
-        print("\nCtrl+C received. Shutting down gracefully...")
-        print_log("Ctrl+C received. Shutting down gracefully...")
+        print("\nCtrl+C received in ascii_picture.py. Shutting down gracefully...")
+        print_log("Ctrl+C received in ascii_picture.py. Shutting down gracefully...")
         shutdown_event.set()
     finally:
         print('\033[?25h', end='')
