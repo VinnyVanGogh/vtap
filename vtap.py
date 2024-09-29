@@ -48,7 +48,7 @@ def run_program(shutdown_event):
         while video_thread.is_alive() or audio_thread.is_alive():
             time.sleep(0.1)
     except KeyboardInterrupt:
-        print("\nCtrl+C received. (main in vtap.py) Shutting down gracefully...")
+        print("\nCtrl+C received... Shutting down gracefully...")
         print(shutdown_event.is_set())
         video_thread.join()
         audio_thread.join()
@@ -66,6 +66,7 @@ def clear_logs():
         clear_log.write('')
         clear_log.close()
 
+@log('main')
 def main():
     clear_logs()
 
