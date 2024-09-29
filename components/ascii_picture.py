@@ -1,11 +1,7 @@
 # ./components/ascii_picture.py
 
-import cv2
-import os
-import sys
-import time
-import threading
-from components.ascii_art import AsciiArt
+import cv2, os, sys, time, threading
+from core.ascii_art import AsciiArt
 from components.logger import log, print_log
 
 @log('main')

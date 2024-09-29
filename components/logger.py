@@ -6,6 +6,15 @@ import contextvars
 from pathlib import Path
 import threading
 
+def kill_all_loggers():
+    print("Killing and deleting all loggers to stop program.")
+    for logger in loggers.values():
+        for handler in logger.handlers:
+            handler.close()
+            logger.removeHandler(handler)
+    loggers.clear()
+    print("All loggers killed and deleted.", loggers)
+
 current_logger = contextvars.ContextVar('current_logger', default=None)
 
 LOG_DIR = 'app_logs/'

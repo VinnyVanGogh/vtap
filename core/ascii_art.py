@@ -1,4 +1,4 @@
-# ./components/ascii_art.py
+# ./core/ascii_art.py
 
 import cv2
 import numpy as np

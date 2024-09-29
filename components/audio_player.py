@@ -1,11 +1,7 @@
 # ./components/audio_player.py
 
-import subprocess
-import os
-import sys
-import threading
-import time
-import signal
+import subprocess, os, sys, threading, time, signal
+from core.signal_handling import SignalHandler
 from components.logger import log, print_log
 
 @log('main')
