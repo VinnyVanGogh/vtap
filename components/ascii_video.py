@@ -4,7 +4,6 @@ import cv2, os, sys, time, threading, queue
 from colorama import init, Style
 
 from core.ascii_art import AsciiArt
-from core.signal_handling import SignalHandler
 
 from components.logger import log, print_log
 from components.loading_bar import display_loading_bar
@@ -192,7 +191,6 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
 
     while not shutdown_event.is_set() and not processing_done.is_set():
         time.sleep(0.1)
-    shutdown_event = SignalHandler().get_shutdown_event()
 
     if shutdown_event.is_set():
         print('Video Shutdown event received. Exiting...')

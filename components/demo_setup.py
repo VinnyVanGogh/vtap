@@ -1,5 +1,7 @@
-from components.my_args import parse_args
+# ./components/demo_setup.py 
+
 import time
+from components.my_args import parse_args
 
 def demo_playbacks():
     args = parse_args()

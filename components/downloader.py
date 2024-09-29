@@ -1,10 +1,9 @@
+import re, time, requests, shutil
+
 from pathlib import Path
 from pytube import YouTube as youtube
-import re
-import time
-import requests
-import shutil
 from urllib.parse import urlparse
+
 from components.logger import log, print_log
 
 @log('main')

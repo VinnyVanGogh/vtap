@@ -8,12 +8,10 @@ class SignalHandler:
 
     def signal_handler(self, sig, frame):
         print("\nCtrl+C received. Gracefully closing...")
-        self.shutdown_event.set()
-        print(self.shutdown_event.is_set())
-
         graceful_close = GracefulClose()
         graceful_close.exit_gracefully(sig, frame)
         graceful_close.close(sig, frame)
+        self.shutdown_event.set()
 
     def set_signal_handler(self):
         signal.signal(signal.SIGINT, self.signal_handler)
