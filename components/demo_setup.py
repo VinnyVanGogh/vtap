@@ -1,8 +1,12 @@
 # ./components/demo_setup.py 
 
 import time
-from core.my_args import parse_args
-from core.logger import log, print_log
+
+from core import (
+        parse_args,
+        log,
+        print_log
+    )
 
 @log('main')
 def demo_playbacks():

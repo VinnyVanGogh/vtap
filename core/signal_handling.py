@@ -1,5 +1,7 @@
-import signal 
-import threading 
+# ./core/signal_handling.py
+
+import signal, threading
+
 from core.close_handling import GracefulClose
 
 class SignalHandler:

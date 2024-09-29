@@ -1,5 +1,4 @@
-import sys
-import signal
+import sys, signal
 
 class GracefulClose:
     kill_now = False

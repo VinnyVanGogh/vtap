@@ -3,10 +3,32 @@
 import cv2, os, sys, time, threading, queue
 from colorama import init, Style
 
-from core.ascii_art import AsciiArt
+from core import (
+        AsciiArt,
+        display_loading_bar,
+        print_log,
+        log
+    )
 
-from core.logger import log, print_log
-from components.loading_bar import display_loading_bar
+def log_credits():
+    print_log("Video playback complete.", level="info")
+    print_log(f"Total frames processed: {total_frames_processed}", level="info")
+    print_log(f"Total frames skipped: {total_frames_skipped}", level="warning")
+
+
+def log_messages(message_choice, _func_name=None, _exception=None, _message=None):
+    dict_messages = {
+        "exception": "Exception in {_func_name}: {_exception}",
+        "info": "{_message}",
+        "warning": "Warning: {_message}",
+        "error": "Error: {_message}"
+    }
+    message = dict_messages[message_choice]
+    if message_choice == "exception":
+        print_log(message.format(_func_name=_func_name, _exception=_exception), level="error")
+    else:
+        print_log(message.format(_message=_message), level=message_choice)
+
 
 @log('main')
 def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
@@ -55,7 +77,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
                 frame_queue.put((frame_number, frame))
         except Exception as e:
             print(f"Exception in frame_reader: {e}")
-            print_log(f"Exception in frame_reader: {e}", level="error")
+            log_messages("exception", _func_name="frame_reader", _exception=e)
         finally:
             cap.release()
             for _ in range(num_processor_threads):
@@ -77,7 +99,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
                     width = int(width * args.scale)
                     height = int(height * args.scale)
     
-                print_log(f"Terminal size: {width}x{height}", level="info")
+                log_messages("info", _message=f"Terminal size: {width}x{height}")
 
                 start_time = time.time()
                 ascii_art_generator = AsciiArt(args, frame, (width, height))
@@ -92,7 +114,7 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
                         preprocessing_done.set()
         except Exception as e:
             print(f"Exception in frame_processor: {e}")
-            print_log(f"Exception in frame_processor: {e}", level="error")
+            log_messages("exception", _func_name="frame_processor", _exception=e)
 
     @log('ascii_display')
     def frame_display():
@@ -138,11 +160,11 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
 
         except Exception as e:
             print(f"Exception in frame_display: {e}")
-            print_log(f"Exception in frame_display: {e}", level="error")
+            log_messages("exception", _func_name="frame_display", _exception=e)
         finally:
             processing_done.set()
-            print_log(f"Total frames processed: {total_frames_processed}", level="info")
-            print_log(f"Total frames skipped: {total_frames_skipped}", level="warning")
+            total_msg = f"Total frames processed: {total_frames_processed}\nTotal frames skipped: {total_frames_skipped}"
+            log_messages("info", _message=total_msg)
 
     reader_thread = threading.Thread(target=frame_reader)
     processor_threads = [threading.Thread(target=frame_processor) for _ in range(num_processor_threads)]
@@ -166,24 +188,24 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     total_time = end_time - start_time
     avg_processing_time_per_frame = total_time / initial_queue_size
 
-    print_log(f"Preprocessing {initial_queue_size} frames took {total_time:.2f} seconds.", level="info")
-    print_log(f"Average processing time per frame: {avg_processing_time_per_frame:.4f} seconds.", level="info")
-    print_log(f"Frame delay (time per frame at {fps} FPS): {frame_delay:.4f} seconds.", level="info")
+    log_messages("info", _message=f"""Preprocessing {initial_queue_size} frames took {total_time:.2f} seconds.
+                 Average processing time per frame: {avg_processing_time_per_frame:.4f} seconds.
+                 Frame delay (time per frame at {fps} FPS): {frame_delay:.4f} seconds.""")
 
     estimated_skipped_frames = int((avg_processing_time_per_frame - frame_delay) * initial_queue_size)
     
-    print_log(f"Estimated skipped frames: {estimated_skipped_frames}", level="warning")
+    log_messages("info", _message=f"Estimated skipped frames: {estimated_skipped_frames}")
     
     if estimated_skipped_frames > 0:
         played_frames_per_skipped_frame = total_frames_processed / total_frames_skipped
-        print_log(f"Played frames per skipped frame: {played_frames_per_skipped_frame:.2f}", level="warning")
+        log_messages("info", _message=f"Played frames: {total_frames_processed}\nSkipped frames: {total_frames_skipped}")
     else:
-        print_log("No frames should be skipped.", level="info")
+        log_messages("info", _message="No frames should be skipped.")
 
     if avg_processing_time_per_frame > frame_delay:
-        print_log("Warning: Processing is slower than the expected frame rate. Consider optimizing.", level="warning")
+        log_messages("warning", _message="Processing is slower than the expected frame rate. Consider optimizing.")
     else:
-        print_log("Processing is fast enough to keep up with the expected FPS.", level="info")
+        log_messages("info", _message="Processing is fast enough to keep up with the expected FPS.")
 
     playback_started_event.set()
     display_thread = threading.Thread(target=frame_display)
@@ -201,6 +223,5 @@ def play_ascii_video(video_path, args, shutdown_event, playback_started_event):
     for t in processor_threads:
         t.join()
     display_thread.join()
-
-    print_log("Video playback complete.", level="info")
-    print_log(f"Total frames processed: {total_frames_processed}", level="info")
+    
+    log_credits()

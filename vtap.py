@@ -1,22 +1,25 @@
 # vtap.py
 
-import threading
-import signal
-import time
-import sys
-import os
+import threading, signal, time, sys, os
+
 from pathlib import Path
-from components.downloader import download_video, download_picture
-from components.ascii_video import play_ascii_video
-from components.audio_player import play_audio
-from components.ascii_picture import display_picture
 
-from core.logger import log, print_log, kill_all_loggers
+from components import (
+        download_video,
+        download_picture,
+        play_ascii_video,
+        play_audio,
+        display_picture,
+        demo_playbacks
+        )
 
-from components.demo_setup import demo_playbacks
-from core.signal_handling import SignalHandler
-
-
+from core import (
+        SignalHandler,
+        clear_logs,
+        log,
+        print_log,
+        kill_all_loggers 
+        )
 
 @log('main')
 def run_program(shutdown_event):
@@ -59,20 +62,14 @@ def run_program(shutdown_event):
     video_thread.join()
     audio_thread.join()
 
-def clear_logs():
-    log_files = Path('app_logs').glob('*.log')
-    for log_file in log_files:
-        clear_log = open(log_file, 'w')
-        clear_log.write('')
-        clear_log.close()
 
 @log('main')
 def main():
-    clear_logs()
-
     shutdown_event = SignalHandler().get_shutdown_event()
+    
     SignalHandler().set_signal_handler()
 
+    clear_logs()
     run_program(shutdown_event)
 
 if __name__ == '__main__':

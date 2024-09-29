@@ -1,9 +1,12 @@
 # ./components/ascii_picture.py
 
 import cv2, os, sys, time, threading
-from core.ascii_art import AsciiArt
-from core.logger import log, print_log
 
+from core import (
+        AsciiArt,
+        log,
+        print_log
+    )
 
 @log('main')
 def display_picture(new_image_path, args, shutdown_event):

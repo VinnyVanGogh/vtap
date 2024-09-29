@@ -1,8 +1,7 @@
 # ./components/loading_bar.py
 
-import sys
-import os
-import time
+import sys, os, time
+
 from core.logger import log, print_log
 
 @log('main')
@@ -22,3 +21,4 @@ def display_loading_bar(total, processed_func, shutdown_event, refresh_interval=
         time.sleep(refresh_interval)
     sys.stdout.write('\n')
     sys.stdout.flush()
+

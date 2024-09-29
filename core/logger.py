@@ -1,10 +1,23 @@
 # ./components/logger.py
 
-import logging
+import logging, contextvars, threading, os
+
 from functools import wraps
-import contextvars
 from pathlib import Path
-import threading
+
+from core.signal_handling import SignalHandler
+
+current_logger = contextvars.ContextVar('current_logger', default=None)
+
+LOG_DIR = 'app_logs/'
+
+loggers = {}
+
+step_counter = 0
+
+counter_lock = threading.Lock()
+
+shutdown_event = SignalHandler().get_shutdown_event()
 
 def kill_all_loggers():
     print("Killing and deleting all loggers to stop program.")
@@ -15,19 +28,11 @@ def kill_all_loggers():
     loggers.clear()
     print("All loggers killed and deleted.", loggers)
 
-current_logger = contextvars.ContextVar('current_logger', default=None)
-
-LOG_DIR = 'app_logs/'
-
-loggers = {}
-
-step_counter = 0
-counter_lock = threading.Lock()
-
-def increment_step():
+def increment_step(shutdown_event):
     global step_counter
     with counter_lock:
-        step_counter += 1
+        if not shutdown_event.is_set():
+            step_counter += 1
         return step_counter
 
 def get_logger(log_file):
@@ -54,7 +59,7 @@ def log(log_file):
         @wraps(func)
         def wrapper(*args, **kwargs):
             logger = get_logger(log_file)
-            current_step = increment_step()
+            current_step = increment_step(shutdown_event)
             token = current_logger.set(logger)
             try:
                 logger.debug(f"Step {current_step}: Called function '{func.__name__}'")
@@ -75,19 +80,25 @@ def print_log(message, level='INFO'):
     if not logger:
         logger = get_logger('main')
     if logger:
-        current_step = step_counter
 
         if level.upper() == 'DEBUG':
-            logger.debug(message, extra={'step': current_step})
+            logger.debug(message)
         elif level.upper() == 'INFO':
-            logger.info(message, extra={'step': current_step})
+            logger.info(message)
         elif level.upper() == 'WARNING':
-            logger.warning(message, extra={'step': current_step})
+            logger.warning(message)
         elif level.upper() == 'ERROR':
-            logger.error(message, extra={'step': current_step})
+            logger.error(message)
         elif level.upper() == 'CRITICAL':
-            logger.critical(message, extra={'step': current_step})
+            logger.critical(message)
         else:
-            logger.info(message, extra={'step': current_step})
+            logger.info(message)
     else:
         raise RuntimeError("print_log called outside of a decorated function. No logger is set.")
+
+def clear_logs():
+    log_files = Path('app_logs').glob('*.log')
+    for log_file in log_files:
+        clear_log = open(log_file, 'w')
+        clear_log.write('')
+        clear_log.close()
