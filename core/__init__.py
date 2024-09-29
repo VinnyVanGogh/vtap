@@ -10,3 +10,4 @@ __all__ = ['AsciiArt', 'log', 'print_log', 'display_loading_bar', 'SignalHandler
 # import in the main file
 # from core import AsciiArt, log, print_log, display_loading_bar, SignalHandler, parse_args, clear_logs, kill_logs
 # or from core import *
+# or import core

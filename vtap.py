@@ -4,22 +4,8 @@ import threading, signal, time, sys, os
 
 from pathlib import Path
 
-from components import (
-        download_video,
-        download_picture,
-        play_ascii_video,
-        play_audio,
-        display_picture,
-        demo_playbacks
-        )
-
-from core import (
-        SignalHandler,
-        clear_logs,
-        log,
-        print_log,
-        kill_all_loggers 
-        )
+from components import *
+from core import *
 
 @log('main')
 def run_program(shutdown_event):
