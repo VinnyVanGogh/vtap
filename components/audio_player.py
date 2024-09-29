@@ -2,7 +2,7 @@
 
 import subprocess, os, sys, threading, time, signal
 from core.signal_handling import SignalHandler
-from components.logger import log, print_log
+from core.logger import log, print_log
 
 @log('main')
 def play_audio(video_path, shutdown_event):

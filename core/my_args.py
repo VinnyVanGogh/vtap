@@ -2,7 +2,7 @@
 
 import argparse
 
-from components.logger import log
+from core.logger import log
 
 @log('main')
 def parse_args():

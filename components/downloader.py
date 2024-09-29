@@ -4,7 +4,7 @@ from pathlib import Path
 from pytube import YouTube as youtube
 from urllib.parse import urlparse
 
-from components.logger import log, print_log
+from core.logger import log, print_log
 
 @log('main')
 def get_video_id(url):

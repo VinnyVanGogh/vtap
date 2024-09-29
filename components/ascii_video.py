@@ -5,7 +5,7 @@ from colorama import init, Style
 
 from core.ascii_art import AsciiArt
 
-from components.logger import log, print_log
+from core.logger import log, print_log
 from components.loading_bar import display_loading_bar
 
 @log('main')

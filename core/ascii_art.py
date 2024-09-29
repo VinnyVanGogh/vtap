@@ -3,7 +3,7 @@
 import cv2
 import numpy as np
 from colorama import init
-from components.logger import log, print_log
+from core.logger import log, print_log
 
 init()
 

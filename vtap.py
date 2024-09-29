@@ -9,9 +9,10 @@ from pathlib import Path
 from components.downloader import download_video, download_picture
 from components.ascii_video import play_ascii_video
 from components.audio_player import play_audio
-from components.my_args import parse_args
 from components.ascii_picture import display_picture
-from components.logger import log, print_log, kill_all_loggers
+
+from core.logger import log, print_log, kill_all_loggers
+
 from components.demo_setup import demo_playbacks
 from core.signal_handling import SignalHandler
 
@@ -22,6 +23,11 @@ def run_program(shutdown_event):
     playback_started_event = threading.Event()
 
     args = demo_playbacks()
+
+    if args.image_path:
+        new_image_path = download_picture(args.image_path)
+        display_picture(new_image_path, args, shutdown_event)
+        sys.exit(0)
 
     video_path = download_video(args.url)
 
