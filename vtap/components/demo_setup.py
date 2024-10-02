@@ -22,7 +22,8 @@ def demo_playbacks():
         print("Demo mode enabled... you can use --chars to change the characters used to display the demo video.")
         if not args.chars:
             args.chars = '█▓▒░ '
-        args.url = 'https://www.youtube.com/watch?v=zyefOCRZMpA'
+        # args.url = 'https://www.youtube.com/watch?v=zyefOCRZMpA'
+        args.url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         print(f"This emulates running `python vtap.py --url {args.url} --chars {args.chars}`")
         time.sleep(2)
 
