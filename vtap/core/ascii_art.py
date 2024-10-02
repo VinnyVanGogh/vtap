@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from colorama import init
 
-from vtap.core.logger import log, print_log
+from vtap.core.logger import log
 
 init()
 

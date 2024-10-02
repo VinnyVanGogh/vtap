@@ -1,7 +1,7 @@
 # ./components/ascii_video.py
 
 import cv2, os, sys, time, threading, queue
-from colorama import init, Style
+from colorama import init
 
 from vtap.core import (
         AsciiArt,
