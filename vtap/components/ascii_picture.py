@@ -1,6 +1,8 @@
 # ./components/ascii_picture.py
 
-import cv2, os, sys, time, threading
+import cv2
+import os
+import time
 
 from vtap.core import (
         AsciiArt,

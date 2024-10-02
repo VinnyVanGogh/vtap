@@ -1,8 +1,9 @@
 # vtap.py
 
-import threading, signal, time, sys, os
+import threading
+import time
+import sys
 
-from pathlib import Path
 
 from vtap.components import *
 from vtap.core import *

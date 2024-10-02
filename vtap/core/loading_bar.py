@@ -2,7 +2,7 @@
 
 import sys, os, time
 
-from vtap.core.logger import log, print_log
+from vtap.core.logger import log
 
 @log('main')
 def display_loading_bar(total, processed_func, shutdown_event, refresh_interval=0.01):

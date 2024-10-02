@@ -1,9 +1,11 @@
 # ./components/audio_player.py
 
-import subprocess, os, sys, threading, time, signal
+import subprocess
+import os
+import time
+import signal
 
 from vtap.core import (
-        SignalHandler,
         log,
         print_log
     )
