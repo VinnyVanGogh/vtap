@@ -10,3 +10,4 @@ videos/
 __pycache__
 app_logs/
 *.egg-info/
+to-do-list.md
