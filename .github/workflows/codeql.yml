@@ -1,7 +1,7 @@
 # Change the language if necessary
 # Check in the security tab after running for results
 
-name: "CodeQL Advanced🚨 (Template)"
+name: "CodeQL Advanced🚨"
 
 on:
   push:
