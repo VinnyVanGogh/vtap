@@ -4,8 +4,7 @@ import time
 
 from vtap.core import (
         parse_args,
-        log,
-        print_log
+        log
     )
 
 @log('main')
