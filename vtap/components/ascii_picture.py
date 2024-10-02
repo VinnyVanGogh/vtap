@@ -2,7 +2,7 @@
 
 import cv2, os, sys, time, threading
 
-from core import (
+from vtap.core import (
         AsciiArt,
         log,
         print_log

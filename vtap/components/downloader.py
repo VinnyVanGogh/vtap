@@ -4,7 +4,7 @@ from pathlib import Path
 from pytube import YouTube as youtube
 from urllib.parse import urlparse
 
-from core import (
+from vtap.core import (
         log,
         print_log
     )

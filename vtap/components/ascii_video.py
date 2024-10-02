@@ -3,7 +3,7 @@
 import cv2, os, sys, time, threading, queue
 from colorama import init, Style
 
-from core import (
+from vtap.core import (
         AsciiArt,
         display_loading_bar,
         print_log,

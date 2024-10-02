@@ -2,7 +2,7 @@
 
 import time
 
-from core import (
+from vtap.core import (
         parse_args,
         log,
         print_log

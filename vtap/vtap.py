@@ -4,8 +4,8 @@ import threading, signal, time, sys, os
 
 from pathlib import Path
 
-from components import *
-from core import *
+from vtap.components import *
+from vtap.core import *
 
 @log('main')
 def run_program(shutdown_event):

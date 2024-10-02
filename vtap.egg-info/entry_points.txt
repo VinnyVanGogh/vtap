@@ -1,0 +1,2 @@
+[console_scripts]
+vtap = vtap.vtap:main

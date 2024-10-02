@@ -2,7 +2,7 @@
 
 import argparse
 
-from core.logger import log
+from vtap.core.logger import log
 
 @log('main')
 def parse_args():

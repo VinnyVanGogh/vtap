@@ -1,8 +1,8 @@
-from components.downloader import download_video, download_picture
-from components.ascii_video import play_ascii_video
-from components.audio_player import play_audio
-from components.ascii_picture import display_picture
-from components.demo_setup import demo_playbacks
+from vtap.components.downloader import download_video, download_picture
+from vtap.components.ascii_video import play_ascii_video
+from vtap.components.audio_player import play_audio
+from vtap.components.ascii_picture import display_picture
+from vtap.components.demo_setup import demo_playbacks
 
 __all__ = ['download_video', 'download_picture', 'play_ascii_video', 'play_audio', 'display_picture', 'demo_playbacks']
 

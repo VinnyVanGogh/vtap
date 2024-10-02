@@ -2,7 +2,7 @@
 
 import signal, threading
 
-from core.close_handling import GracefulClose
+from vtap.core.close_handling import GracefulClose
 
 class SignalHandler:
     def __init__(self):

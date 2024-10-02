@@ -5,7 +5,7 @@ import logging, contextvars, threading, os
 from functools import wraps
 from pathlib import Path
 
-from core.signal_handling import SignalHandler
+from vtap.core.signal_handling import SignalHandler
 
 current_logger = contextvars.ContextVar('current_logger', default=None)
 

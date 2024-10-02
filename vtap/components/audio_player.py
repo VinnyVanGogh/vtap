@@ -2,7 +2,7 @@
 
 import subprocess, os, sys, threading, time, signal
 
-from core import (
+from vtap.core import (
         SignalHandler,
         log,
         print_log
