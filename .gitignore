@@ -9,3 +9,4 @@ videos/
 *.log
 __pycache__
 app_logs/
+*.egg-info/
