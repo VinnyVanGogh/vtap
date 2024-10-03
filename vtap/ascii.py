@@ -7,6 +7,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from vtap.components import *
 from vtap.core import *
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 @log('main')
 def run_program(shutdown_event):
     active_processes = ActiveProcesses()
@@ -17,6 +20,7 @@ def run_program(shutdown_event):
     playback_started_event = threading.Event()
 
     args = demo_playbacks()
+    clear_terminal()
 
     if args.image_path:
         new_image_path = download_picture(args.image_path)
