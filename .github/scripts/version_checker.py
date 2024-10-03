@@ -3,10 +3,36 @@ import sys
 import configparser
 import toml
 import requests
+from pathlib import Path
 
-# Function to fetch the current version from PyPI
+PACKAGE_NAME = "my_package"
+
+def find_package_name():
+    cwd = Path.cwd()
+    setup_cfg = cwd / 'setup.cfg'
+    pyproject_toml = cwd / 'pyproject.toml'
+    if os.path.exists(setup_cfg):
+        config = configparser.ConfigParser()
+        config.read(setup_cfg)
+        if 'metadata' in config and 'name' in config['metadata']:
+            package_name = config['metadata']['name']
+
+    if os.path.exists(pyproject_toml):
+        try:
+            with open(pyproject_toml, 'r') as file:
+                pyproject_data = toml.load(file)
+                package_name = pyproject_data.get('project', {}).get('name')
+        except (FileNotFoundError, toml.TomlDecodeError):
+            pass
+
+    if not os.path.exists(pyproject_toml) and not os.path.exists(setup_cfg):
+        package_name = PACKAGE_NAME
+
+    return package_name
+
 def get_pypi_version(package_name):
     url = f"https://pypi.org/pypi/{package_name}/json"
+    print(f"Fetching version from PyPI: {url}")
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -16,7 +42,6 @@ def get_pypi_version(package_name):
         print(f"Error fetching version from PyPI: {e}")
         return None
 
-# Function to check version in setup.cfg
 def get_setup_cfg_version():
     config = configparser.ConfigParser()
     config.read('setup.cfg')
@@ -25,7 +50,6 @@ def get_setup_cfg_version():
         return config['metadata']['version']
     return None
 
-# Function to check version in pyproject.toml
 def get_pyproject_toml_version():
     try:
         with open('pyproject.toml', 'r') as file:
@@ -34,23 +58,18 @@ def get_pyproject_toml_version():
     except (FileNotFoundError, toml.TomlDecodeError):
         return None
 
-# Compare the current version in setup.cfg and pyproject.toml with the version on PyPI
 def main():
-    package_name = "vinmap"  # Change to your package name
+    package_name = find_package_name()
 
-    # Get the version from PyPI
     pypi_version = get_pypi_version(package_name)
 
-    # Get local versions from setup.cfg and pyproject.toml
     setup_cfg_version = get_setup_cfg_version()
     pyproject_toml_version = get_pyproject_toml_version()
 
-    # Check version in setup.cfg
     if setup_cfg_version and setup_cfg_version != pypi_version:
         print(f"Version changed in setup.cfg: {pypi_version} -> {setup_cfg_version}")
         sys.exit(0)
 
-    # Check version in pyproject.toml
     if pyproject_toml_version and pyproject_toml_version != pypi_version:
         print(f"Version changed in pyproject.toml: {pypi_version} -> {pyproject_toml_version}")
         sys.exit(0)
@@ -60,4 +79,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

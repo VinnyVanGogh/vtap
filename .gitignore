@@ -1,13 +1,20 @@
-.venv*
-videos/
+# Common files to ignore in a Python project
 *.log
-__pycache__
-images/
-OLD/
 .venv*
-videos/
-*.log
+build/
+dist/
 __pycache__
-app_logs/
+
+# Common files for a python module with setuptools 
 *.egg-info/
+*.egg
+*.egg-info
+*.dist-info 
+*.dist 
+
+# Custom files to ignore in a Python project
 to-do-list.md
+app_logs/
+videos/
+OLD/
+z_old/
