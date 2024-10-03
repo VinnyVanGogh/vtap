@@ -1,7 +1,6 @@
 # vtap.py
 
 import threading
-import time
 import sys
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
