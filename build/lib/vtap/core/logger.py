@@ -21,30 +21,7 @@ counter_lock = threading.Lock()
 
 shutdown_event = SignalHandler().get_shutdown_event()
 
-def log_credits():
-    # Note: Accessing total_frames_processed and total_frames_skipped here will cause a NameError
-    # because they are defined in the outer scope of play_ascii_video.
-    # To fix this, you can pass these values as parameters or restructure the code.
-    # For now, we'll comment these out to prevent errors.
-    # print_log(f"Total frames processed: {total_frames_processed}", level="info")
-    # print_log(f"Total frames skipped: {total_frames_skipped}", level="warning")
-    pass
-
-def log_messages(message_choice, _func_name=None, _exception=None, _message=None):
-    dict_messages = {
-        "exception": "Exception in {_func_name}: {_exception}",
-        "info": "{_message}",
-        "warning": "Warning: {_message}",
-        "error": "Error: {_message}"
-    }
-    message = dict_messages.get(message_choice, "{_message}")
-    if message_choice == "exception":
-        print_log(message.format(_func_name=_func_name, _exception=_exception), level="error")
-    else:
-        print_log(message.format(_message=_message), level=message_choice)
-
 def kill_all_loggers():
-    print_log("Video playback stopped.", level="info")
     print("Killing and deleting all loggers to stop program.")
     for logger in loggers.values():
         for handler in logger.handlers:

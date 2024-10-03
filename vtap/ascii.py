@@ -5,8 +5,6 @@ import time
 import sys
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
-
 from vtap.components import *
 from vtap.core import *
 
@@ -21,8 +19,6 @@ def run_program(shutdown_event):
 
     args = demo_playbacks()
 
-    print(f'Arguments: {args}')
-
     if args.image_path:
         new_image_path = download_picture(args.image_path)
         display_picture(new_image_path, args, shutdown_event)
@@ -30,34 +26,38 @@ def run_program(shutdown_event):
 
     video_path = download_video(args.url)
 
-    video_thread = threading.Thread(
-        target=play_ascii_video,
-        args=(video_path, args, shutdown_event, playback_started_event)
-    )
-    audio_thread = threading.Thread(
-        target=play_audio,
-        args=(video_path, shutdown_event)
+    video_thread = executor.submit(
+        play_ascii_video,
+        video_path, args, shutdown_event, playback_started_event
     )
 
-    video_thread.start()
-    playback_started_event.wait()
-    audio_thread.start()
+    audio_thread = executor.submit(
+        play_audio,
+        video_path
+    )
+
+    audio_future = executor.submit(
+        play_audio,
+        video_path, active_processes, shutdown_event  # Pass active_processes and shutdown_event
+    )
+
+    video_future = executor.submit(
+        play_ascii_video,
+        video_path, args, shutdown_event, playback_started_event, active_processes  # Pass active_processes
+    )
 
     try:
-        while video_thread.is_alive() or audio_thread.is_alive():
-            time.sleep(0.1)
+        # Wait for both tasks to complete
+        for future in as_completed([video_future, audio_future]):
+            pass
     except KeyboardInterrupt:
         print("\nCtrl+C received... Shutting down gracefully...")
-        print(shutdown_event.is_set())
-        video_thread.join()
-        audio_thread.join()
-        kill_all_loggers()
         shutdown_event.set()
+        kill_all_loggers()
         sys.exit(0)
-    
-    video_thread.join()
-    audio_thread.join()
 
+    # Shutdown the executor
+    executor.shutdown(wait=True)
 
 @log('main')
 def main():
@@ -68,5 +68,3 @@ def main():
     clear_logs()
     run_program(shutdown_event)
 
-if __name__ == '__main__':
-    main()

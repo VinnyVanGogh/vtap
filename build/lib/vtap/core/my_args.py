@@ -6,7 +6,7 @@ from vtap.core.logger import log
 
 @log('main')
 def parse_args():
-    parser = argparse.ArgumentParser(description='Play YouTube video in ASCII art with audio using Multi-threading')
+    parser = argparse.ArgumentParser(description='Play YouTube video in ASCII art with audio.')
     parser.add_argument('-u','--url', help='YouTube video URL')
     parser.add_argument('-c','--chars', help='Characters to use for ASCII art')
     parser.add_argument('-s','--scale', type=float, default=1.0, help='Scale factor for ASCII art (e.g., 0.5 for half size)')
