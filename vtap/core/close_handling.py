@@ -1,7 +1,6 @@
 import threading 
 import signal 
 import sys 
-import os
 
 BOLD = "\033[1m"
 END = "\033[0m"
