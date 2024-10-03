@@ -82,4 +82,4 @@ jobs:
             ${{ env.DIFF_CONTENT }}
             ```
 
-          labels: automated, remove_imports
+          labels: automated, remove imports
