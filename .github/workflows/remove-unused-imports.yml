@@ -72,12 +72,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: Remove unused imports"
           branch: remove-unused-imports-${{ github.run_number }}
-          title: "chore: Remove unused imports"
+          title: "Chore: Remove unused imports"
           body: |
             The following unused imports and variables were removed by [autoflake](https://github.com/myint/autoflake):
+
+            This is ran every time you push to the repo.
 
             ```
             ${{ env.DIFF_CONTENT }}
             ```
 
-          labels: automated
+          labels: automated, remove_imports
