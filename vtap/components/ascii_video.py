@@ -11,7 +11,6 @@ from colorama import init
 from vtap.core import (
     AsciiArt,
     display_loading_bar,
-    print_log,
     log,
     log_messages
 )
