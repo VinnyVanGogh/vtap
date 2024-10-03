@@ -1,5 +1,7 @@
-import re, time, requests, shutil
-
+import re
+import time 
+import requests 
+import shutil
 from pathlib import Path
 from pytube import YouTube as youtube
 from urllib.parse import urlparse
@@ -22,11 +24,21 @@ def get_video_id(url):
 def download_video(url):
     formatted_url = get_video_id(url)
     yt = youtube(formatted_url)
+    if not yt:
+        print_log(f"Failed to get video: {url}", level="error")
+        print(f"Failed to get video: {url}")
+        return None
+    time.sleep(1)
     author = yt.author
     video_id = yt.video_id
 
     safe_author = re.sub(r'[\\/*?:"<>|]', "", author.lower().replace(' ', '_'))
     safe_title = re.sub(r'[\\/*?:"<>|]', "", yt.title.lower().replace(' ', '_'))
+
+    print(f"Author: {author}")
+    print(f"Video ID: {video_id}")
+    print(f"Safe Author: {safe_author}")
+    print(f"Safe Title: {safe_title}")  
 
     video_dir = Path(__file__).resolve().parent / "videos" / safe_author
     video_dir.mkdir(parents=True, exist_ok=True)

@@ -3,6 +3,8 @@
 import threading
 import time
 import sys
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 from vtap.components import *
@@ -10,9 +12,16 @@ from vtap.core import *
 
 @log('main')
 def run_program(shutdown_event):
+    active_processes = ActiveProcesses()
+    max_cores = os.cpu_count()
+    max_workers = max_cores - 2 if max_cores > 2 else 1
+    executor = ThreadPoolExecutor(max_workers=max_workers)
+    ThreadKiller(active_processes, executor)
     playback_started_event = threading.Event()
 
     args = demo_playbacks()
+
+    print(f'Arguments: {args}')
 
     if args.image_path:
         new_image_path = download_picture(args.image_path)
